@@ -1,0 +1,62 @@
+//author: Yifan Wang
+class WordDictionary {
+
+    TireNode root;
+        
+    /** Initialize your data structure here. */
+    public WordDictionary() {
+        root = new TireNode();
+    }
+    
+    public void addWord(String word) {
+        addTire(word, root);
+    }
+    
+    public boolean search(String word) {
+        return DFS(word, root);
+    }
+    
+    public void addTire(String str, TireNode root){
+        TireNode p = root;
+        char[] chars = str.toCharArray();
+        for(char c : chars){
+            int i = c-'a';
+            if(p.list[i]==null){
+                p.list[i] = new TireNode();
+            } 
+            p = p.list[i];
+        }
+        p.word = str;
+    }
+    
+    public boolean DFS(String str, TireNode root){
+        if(str.equals("")||str==null){
+            if(root.word==null) return false;
+            return true;
+        } else if(str.charAt(0)=='.'){
+            boolean bool = false;
+            for(TireNode t: root.list){
+                if(t!=null) bool = bool||DFS(str.substring(1), t);
+            }
+            return bool;
+        } else {
+            int i = str.charAt(0)-'a';
+            if(root.list[i]!=null){
+                return DFS(str.substring(1), root.list[i]);
+            }
+            return false;
+        }
+    }
+    
+    class TireNode{
+        TireNode[] list = new TireNode[26];
+        String word;
+    }
+
+}
+/**
+ * Your WordDictionary object will be instantiated and called as such:
+ * WordDictionary obj = new WordDictionary();
+ * obj.addWord(word);
+ * boolean param_2 = obj.search(word);
+ */
